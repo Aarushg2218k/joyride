@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Joy Ride</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"
+        integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+   <link rel="stylesheet" href="style1.css">
+    <script>
+        $(document).ready(function(){
+        function setActiveUser() {
+        if(localStorage.getItem("Activekuch")==undefined)
+            {
+                location.href="index.html";
+                return;
+            }
+        var au = localStorage.getItem("Activekuch");
+        $("#txtEmail").val(au).attr("readonly", true);
+      }
+      setActiveUser();
+      $("#logout").click(function () {
+        localStorage.removeItem("Activekuch");
+        location.href = "index.html";
+      })
+    })
+        var module = angular.module("myModule", []);
+        module.controller("myController", function ($scope, $http) {
+            $scope.selcity;
+            $scope.selcar;
+            $scope.table;
+            $scope.tablecar;
+            $scope.freecars;
+            $scope.selRec;
+            $scope.findcity = function () {
+                var url = "/find-city";
+                $http.get(url).then(done, fail);
+                function done(response) {
+                    $scope.table = response.data;
+                }
+                function fail(response) {
+                    alert(response);
+                }
+            }
+
+            $scope.findcar = function () {
+                var url = "/find-cars";
+                $http.get(url).then(done, fail);
+                function done(response) {
+                    $scope.tablecar = response.data;
+
+                }
+                function fail(response) {
+                    alert(response);
+                }
+            }
+
+            $scope.find_driver = function () {
+                var url = "/find-driver?citykuch=" + $scope.selcity.city + "&carkuch=" + $scope.selcar.type;
+                $http.get(url).then(done, fail);
+                function done(response) {
+                    // alert(JSON.stringify(response.data));
+                    $scope.freecars = response.data;
+                }
+                function fail(response) {
+                    alert(response);
+                }
+            }   
+              
+            $scope.doselemail = function(index){
+                $scope.selRec = $scope.freecars[index];
+                // alert(JSON.stringify($scope.selRec));
+            }
+            $scope.data1={
+            eml:localStorage.getItem("Activekuch"),
+            name:"",
+            number:"",
+            add:"",
+            date:"",
+            time:"",
+            src:"",
+            des:""
+            }
+            $scope.journey = function(){
+                var url = "/booking-details?ddata="+JSON.stringify($scope.selRec)+"&cdata="+JSON.stringify($scope.data1);
+                $http.get(url).then(done, fail);
+                function done(response) {
+                    alert(response.data)
+                }
+                function fail(response) {
+                    alert(response);
+                }
+            }
+            // $scope.eml;
+            // $scope.name;
+            // $scope.number;
+            // $scope.add;
+            // $scope.date;
+            // $scope.time;
+            // $scope.src;
+            // $scope.des;
+
+            // $scope.journey = function(){
+            //     var url = "/booking-details?pemail=" + $scope.selRec.email + "&cemail=" + $scope.eml + "&cname=" + $scope.name + "&cnumber=" + $scope.number + "&cadd=" + $scope.add + "&cdate=" + $scope.date + "&ctime=" + $scope.time + "&csrc=" + $scope.src + "&cdes=" + $scope.des;
+            //     $http.get(url).then(done, fail);
+            //     function done(response) {
+            //         alert(response.data)
+            //     }
+            //     function fail(response) {
+            //         alert(response);
+            //     }
+            // }
+        })
+    </script>
+
+</head>
+
+<body ng-app="myModule" ng-controller="myController" ng-init="findcity();findcar()">
+     <!-- Nav bar start -->
+     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <img src="./front pics/Come And Find your Ride Partner.png" alt="" width="50px" style="border-radius: 50%;"> &nbsp;<h2 class="m-0 text-primary">JoyRide</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <!-- <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="#about" class="nav-item nav-link">About</a>
+                <a href="#services" class="nav-item nav-link">Services</a>
+                <a href="contact.html" class="nav-item nav-link">Contact</a> -->
+            </div>
+            <!-- <button href="index.html" class="btn btn-danger index-btn">Signup</button> -->
+            <button id="logout" class="btn btn-danger index-btn">Logout</button>
+        </div>
+    </nav>
+    <!-- ==================================================================================== -->
+    <div class="row mt-5">
+        <div class="col-4 offset-1 ">
+            Select City:- <select ng-options="obj.city for obj in table" class="form-control  border border-primary"
+                ng-model="selcity" ng-change="showselcity();">
+                <option value="">Select</option>
+            </select>
+        </div>
+        <div class="col-4 offset-1">
+            Select Car Type :- <select ng-options="obj.type for obj in tablecar"
+                class="form-control  border border-primary" ng-model="selcar" ng-change="showselcar();">
+                <option value="">Select</option>
+            </select>
+        </div>
+    </div>
+    <center>
+        <input type="button" class="btn btn-danger mt-5" value="Find Drivers" ng-click="find_driver();">
+        <div class="card me-4 mb-2 mt-4 text-start" style="width: 21rem;" ng-repeat="obj in freecars">
+
+            <div class="card-header text-center">
+                <img src="fdpics/donor-card.jpg" class="card-img-top" alt="..." style="width:10vw">
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title text-center">{{obj.name}}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Email : {{obj.email}}</li>
+                <li class="list-group-item">Mobile No.: {{obj.mobile}}</li>
+                <li class="list-group-item">Car model : {{obj.model}}</li>
+                <li class="list-group-item">Car Condition : {{obj.carcondition}}</li>
+                <div class="card-body d-grid gap-2 col-6 mx-auto">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop" ng-click="doselemail($index)">Book Now</button>
+                </div>
+            </ul>
+        </div>
+        <!-- ======================================================================================== -->   
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5  " id="staticBackdropLabel">Enter Journey details </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- <img src="front pics/user7.webp" class="card-img-top  text-center" alt="..." style="width:10vw"> -->
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-1">
+                            <label for="txtEmail">Email address</label>
+                            <input type="email" class="form-control" ng-model="data1.eml" id="txtEmail" name="txtemail" placeholder="Enter Email">
+                        </div>
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Enter Name</label>
+                            <input type="text" class="form-control" ng-model="data1.name" id="txtName" name="txtname" placeholder="Enter Name">
+                        </div>
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Contact No.</label>
+                            <input type="text" class="form-control" ng-model="data1.number" id="txtNumber" name="txtnumber" placeholder="Enter Number">
+                        </div>
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Pickup Address</label>
+                            <input type="text" class="form-control" ng-model="data1.add" id="txtPick" name="txtpick" placeholder="Enter Address">
+                        </div>
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Date of journey</label>
+                            <input type="date" class="form-control" ng-model="data1.date" id="txtDate" name="txtdate" placeholder="Enter Name">
+                        </div>
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Pickup Time</label>
+                            <input type="time" class="form-control" ng-model="data1.time" id="txtTime" name="txttime" placeholder="Enter Name">
+                        </div>
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Source</label>
+                            <input type="text" class="form-control" ng-model="data1.src" id="txtSource" name="txtsource" placeholder="Enter Name">
+                        </div>
+                        <!-- <hr> -->
+                        <div class="col-12 text-start mt-3">
+                            <label for="txtEmail">Destination</label>
+                            <input type="text" class="form-control" ng-model="data1.des" id="txtDestination" name="txtdestination" placeholder="Enter Name">
+                        </div>
+                        <!-- <hr> -->
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-success" value="Submit" ng-click="journey();" >
+                        <a href="//wa.me/{{selindex.mobile}}" class="btn btn-danger"> Chat with Driver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

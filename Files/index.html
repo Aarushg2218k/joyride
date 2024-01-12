@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Joy Ride</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+     <!-- Icon Font Stylesheet -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+      .okhay {
+      color: red;
+      font-weight: bold;
+      float: left;
+      padding: 1px 10px 3px 10px;
+      margin-top: 5px;
+    }
+     .sokhay{
+      color: green;
+      font-weight: bold;
+      float: left;
+      padding: 1px 10px 3px 10px;
+      margin-top: 5px;
+     }
+    </style>
+
+    <link rel="stylesheet" href="./style.css">
+    <script>
+        $(document).ready(function () {
+          $("#btnsnp").click(function () {
+            var email = $("#txtemail").val();
+            var pass = $("#txtpass").val();
+            var select = $("#txtsel").val();
+            var obj = {
+              type: "get",
+              url: "/Sign-up",
+              data: {
+                kuchEmail: email,
+                kuchpass: pass,
+                kuchsel: select
+              }
+            }
+            $.ajax(obj).done(function (respKuch) {
+              $("#res").html(respKuch);
+            }).fail(function (errKuch) {
+              $("#res").html(respKuch);
+            })
+          })
+    
+          $("#btnlgn").click(function () {
+            var email = $("#txtemaillg").val();
+            var pass = $("#txtpasslg").val();
+            var obj = {
+              type: "get",
+              url: "/log-in",
+              data: {
+                kuchEmail: email,
+                kuchpass: pass
+              }
+            }
+            $.ajax(obj).done(function (respKuch) {
+              localStorage.setItem("Activekuch",$("#txtemaillg").val());
+              $("#res2").html(respKuch);
+              if(respKuch=="Driver"){
+                location.href="dash-driver.html";
+              }
+              
+              else if(respKuch=="Customer"){
+                location.href="dash-customer.html";
+              }
+              else if(respKuch=="Admin"){
+                location.href="dash-admin.html";
+
+              }
+              
+            }).fail(function (errKuch) {
+              $("#res2").html(errKuch);
+            })
+          })
+          // =======================================================================
+          $("#frgt").click(function () {
+            var email = $("#txtemaillg").val();
+            var obj = {
+              type: "get",
+              url: "/send-mail",
+              data: {
+                kuchEmail2: email
+              }
+            }
+            $.ajax(obj).done(function (respKuch) {
+              alert("1");
+            }).fail(function (errKuch) {
+              alert("2");
+            })
+          })
+    
+          // ======================================= Login validation ==================================================
+    
+          $("#txtemaillg").blur(function () {
+    
+            var r = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            var eml = $("#txtemaillg").val();
+    
+            if (r.test(eml) != true) {
+              $("#errus2").html("Invalid Email Format").addClass("okhay").removeClass("sokhay");
+            }
+            else{
+              $("#errus2").html("Valid Email Format").addClass("sokhay").removeClass("okhay");
+            }
+          });
+    
+          $("#txtpasslg").blur(function () {
+            var r = /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+            var pss = $("#txtpasslg").val();
+    
+            if (r.test(pss) != true) {
+              $("#errps2").html("Invalid Email format").addClass("okhay");
+            }
+            else{
+              $("#errps2").html("*");
+            }
+    
+          });
+          $(".fa-solid").click(function(){
+                  
+                  var type=$("#txtpass").attr("type");
+    
+                    if(type=="password"){
+                        $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+                        $("#txtpasslg").prop("type","text");
+                        
+                    }
+                    else{
+                        $(this).addClass("fa-eye-slash").removeClass("fa-eye");
+                        $("#txtpasslg").prop("type","password");
+    
+                    }
+                });
+    
+          // ==========================================================Sign up Validations ========================================
+          $("#txtemail").blur(function () {
+    
+            var r = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            var eml = $("#txtemail").val();
+    
+            if (r.test(eml) != true) {
+              $("#errus").html("Invalid Email format").addClass("okhay").removeClass("sokhay");
+            }
+            else{
+              $("#errus").html("Valid Email format").addClass("sokhay").removeClass("okhay");
+            }
+          });
+    
+          // $("#txtpass").blur(function () {
+          //   var r = /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+          //   var pss = $("#txtpass").val();
+    
+          //   if (r.test(pss) != true) {
+          //     $("#errps").html("Weak Password").addClass("okhay").removeClass("sokhay");
+          //   }
+          //   else{
+          //     $("#errps").html("Strong Password").addClass("sokhay").removeClass("okhay");
+          //   }
+    
+          // });
+                $(".fa-solid").click(function(){
+                  
+                  var type=$("#txtpass").attr("type");
+    
+                    if(type=="password"){
+                        $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+                        $("#txtpass").prop("type","text");
+                        
+                    }
+                    else{
+                        $(this).addClass("fa-eye-slash").removeClass("fa-eye");
+                        $("#txtpass").prop("type","password");
+    
+                    }
+                });
+    
+        })
+      </script>
+  </head>
+  <body>
+    <!-- Nav bar start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+      <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <img src="./front pics/Come And Find your Ride Partner.png" alt="" width="50px" style="border-radius: 50%;"> &nbsp;<h2 class="m-0 text-primary">JoyRide</h2>
+    </a>
+      <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav ms-auto p-4 p-lg-0">
+              <a href="index.html" class="nav-item nav-link active">Home</a>
+              <a href="#about" class="nav-item nav-link">About</a>
+              <a href="#services" class="nav-item nav-link">Services</a>
+              <a href="#footer" class="nav-item nav-link">Contact</a>
+          </div>
+          <button class="btn btn-danger index-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Signup</button>
+          <button class="btn btn-danger index-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Login</button>
+      </div>
+  </nav>
+  <!-- Nav bar ends -->
+
+  <!-- crousel image -->
+  <div class="crousel">
+    <img src="./front pics/pic-4.png" alt="" width="100%">
+  </div>
+  <!-- our services -->
+  <div id="features">
+  <div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="d-flex py-5 px-4  animate__animated animate__fadeInUp animate__delay-2s ">
+                    <i class="fa fa-certificate fa-3x text-primary flex-shrink-0"></i>
+                    <div class="ps-4">
+                        <h5 class="mb-3">Quality Services</h5>
+                        <p>Delivering quality services in the automotive sector begins with a customer-centric approach,
+                           understanding their needs and preferences to provide a personalized experience.</p>
+                        <!-- <a class="text-secondary border-bottom" href="">Read More</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="d-flex bg-light py-5 px-4   animate__animated animate__fadeInUp animate__delay-3s ">
+                    <i class="fa fa-users-cog fa-3x text-primary flex-shrink-0"></i>
+                    <div class="ps-4">
+                        <h5 class="mb-3">Tested Drivers</h5>
+                        <p>At our service, safety is our top priority. We provide tested drivers who have undergone rigorous evaluations 
+                          to ensure they meet the highest standards of driving competence, giving you peace of mind on the road.</p>
+                        <!-- <a class="text-secondary border-bottom" href="">Read More</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="d-flex py-5 px-4   animate__animated animate__fadeInUp animate__delay-4s ">
+                    <i class="fa fa-tools fa-3x text-primary flex-shrink-0"></i>
+                    <div class="ps-4">
+                        <h5 class="mb-3">Secured cars</h5>
+                        <p>Our commitment to your safety is reflected in our fleet of secured cars.
+                          Our secured cars undergo regular maintenance checks to guarantee that all safety features are functioning optimally.</p>
+                        <!-- <a class="text-secondary border-bottom" href="">Read More</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- About -->
+  <div id="about">
+    <div class="container-xxl py-5">
+      <div class="container">
+          <div class="row g-5">
+              <div class="col-lg-6 pt-4" style="min-height: 400px;">
+                  <div class="position-relative h-100 wow fadeIn" data-wow-delay="0.1s">
+                      <img class="position-absolute img-fluid w-100 h-100" src="./front pics/about.jpeg" style="object-fit: cover;" alt="">
+                      <div class="position-absolute top-0 end-0 mt-n4 me-n4 py-4 px-5" style="background: rgba(0, 0, 0, .08);">
+                          <h1 class="display-4 text-white mb-0">10 <span class="fs-4">Years</span></h1>
+                          <h4 class="text-white">Experience</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6">
+                  <h6 class="text-primary text-uppercase">// About Us //</h6>
+                  <h1 class="mb-4"><span class="text-primary">JoyRide</span> Is The Best Place For Your Auto Care</h1>
+                  <p class="mb-4">Joy Ride takes pride in its customer-centric approach. We prioritize your needs, delivering
+                     excellence in every aspect of car care to exceed your expectations and build a lasting partnership.</p>
+                  <div class="row g-4 mb-3 pb-3">
+                      <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
+                          <div class="d-flex">
+                              <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                  <span class="fw-bold text-secondary">01</span>
+                              </div>
+                              <div class="ps-3">
+                                  <h6>Professional & Expert</h6>
+                                  <span>Regularly training staff members and keeping them updated on the latest industry trends ensures that
+                                     the service provider stays ahead in terms of knowledge and skills, offering the best possible services.</span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-12 wow fadeIn" data-wow-delay="0.3s">
+                          <div class="d-flex">
+                              <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                  <span class="fw-bold text-secondary">02</span>
+                              </div>
+                              <div class="ps-3">
+                                  <h6>Quality Servicing Center</h6>
+                                  <span>Striving for timely service delivery demonstrates respect for customers' time and minimizes inconvenience.
+                                     Efficient turnaround time is a hallmark of quality car services.</span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-12 wow fadeIn" data-wow-delay="0.5s">
+                          <div class="d-flex">
+                              <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                  <span class="fw-bold text-secondary">03</span>
+                              </div>
+                              <div class="ps-3">
+                                  <h6>Awards Winning Workers</h6>
+                                  <span>We believe in acknowledging and celebrating excellence.
+                                    Driver Awards Program is designed to honor and reward drivers who prioritize safety and adhere
+                                     to responsible driving practices</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+
+   <!-- Fact Start -->
+   <div class="container-fluid fact my-5 py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
+                <i class="fa fa-check fa-2x text-white mb-3"></i>
+                <h2 class="text-white mb-2" data-toggle="counter-up">10</h2>
+                <p class="text-white mb-0">Years Experience</p>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
+                <i class="fa fa-users-cog fa-2x text-white mb-3"></i>
+                <h2 class="text-white mb-2" data-toggle="counter-up">500+</h2>
+                <p class="text-white mb-0">Expert Drivers</p>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
+                <i class="fa fa-users fa-2x text-white mb-3"></i>
+                <h2 class="text-white mb-2" data-toggle="counter-up">11000+</h2>
+                <p class="text-white mb-0">Satisfied Clients</p>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
+                <i class="fa fa-car fa-2x text-white mb-3"></i>
+                <h2 class="text-white mb-2" data-toggle="counter-up">7000+</h2>
+                <p class="text-white mb-0">Compleate Projects</p>
+            </div>
+        </div>
+    </div>
+   </div>
+   <!-- Fact End -->
+
+   <!-- Service Start -->
+   <div id="services">
+    <div class="container-xxl service py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="text-primary text-uppercase">// Our Services //</h6>
+                <h1 class="mb-5">Explore Our Services</h1>
+            </div>
+            <div class="row g-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="col-lg-4">
+                    <div class="nav w-100 nav-pills me-4">
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4 active animate__animated animate__fadeInLeft" data-bs-toggle="pill" data-bs-target="#tab-pane-1" type="button" style="color:black">
+                            <i class="fa fa-car-side fa-2x me-3"></i>
+                            <h4 class="m-0">Doorstep Convenience</h4>
+                        </button>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4 animate__animated animate__fadeInLeft animate__delay-1s " data-bs-toggle="pill" data-bs-target="#tab-pane-2" type="button" style="color:black">
+                            <i class="fa fa-car fa-2x me-3"></i>
+                            <h4 class="m-0">24/7 Accessibility</h4>
+                        </button>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4 animate__animated animate__fadeInLeft animate__delay-2s" data-bs-toggle="pill" data-bs-target="#tab-pane-3" type="button" style="color:black">
+                            <i class="fa fa-cog fa-2x me-3"></i>
+                            <h4 class="m-0">Online Booking</h4>
+                        </button>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-0 animate__animated animate__fadeInLeft animate__delay-3s" data-bs-toggle="pill" data-bs-target="#tab-pane-4" type="button" style="color:black">
+                            <i class="fa fa-oil-can fa-2x me-3"></i>
+                            <h4 class="m-0">Customer-Centric </h4>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="tab-content w-100">
+                        <div class="tab-pane fade show active" id="tab-pane-1">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="./front pics/services.jpeg"
+                                            style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">15 Years Of Experience In Auto Servicing</h3>
+                                    <p class="mb-4">Enjoy the luxury of having a car at your doorstep for both pick-up and drop-off, ensuring a smooth and convenient travel experience.</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Quality Servicing</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Professional Drivers</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Modern Equipment</p>
+                                    <!-- <a href="" class="btn btn-danger py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-2">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="./front pics/services.jpeg"
+                                            style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">15 Years Of Experience In Auto Servicing</h3>
+                                    <p class="mb-4">Need a pick and drop at any hour? Our services are available around the clock, providing you with accessibility whenever you require it.</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Quality Servicing</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Expert Workers</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Modern Equipment</p>
+                                    <!-- <a href="" class="btn btn-danger py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-3">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="./front pics/services.jpeg"
+                                            style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">15 Years Of Experience In Auto Servicing</h3>
+                                    <p class="mb-4">Book a rental car anytime, anywhere, at your convenience.
+                                      Avoid the hassle of visiting a physical location; book from the comfort of your home or on the go.
+                                      </p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Quality Servicing</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Expert Workers</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Modern Equipment</p>
+                                    <!-- <a href="" class="btn btn-danger py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-4">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="./front pics/services.jpeg"
+                                            style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">15 Years Of Experience In Auto Servicing</h3>
+                                    <p class="mb-4">Our focus is on your satisfaction. Experience a customer-centric approach that prioritizes your comfort and convenience throughout the entire journey.</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Quality Servicing</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Expert Workers</p>
+                                    <p><i class="fa fa-check text-success me-3"></i>Modern Equipment</p>
+                                    <!-- <a href="" class="btn btn-danger py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+   </div>
+
+   <!-- Footer Start -->
+   <div id="footer">
+       <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+           <h3 class="text-primary text-uppercase">// Contact us //</h3>
+       </div>
+   <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-3 col-md-6">
+                <h4 class="text-light mb-4">Address</h4>
+                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                <div class="d-flex pt-2">
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" style="margin-left: 130px;">
+                <h4 class="text-light mb-4">Opening Hours</h4>
+                <h6 class="text-light">Monday - Sunday:</h6>
+                <p class="mb-4">12.00 AM - 11.59 PM</p>
+            </div>
+            <div class="col-lg-3 col-md-6" style= "margin-left: 130px;">
+                <h4 class="text-light mb-4">Services</h4>
+                <a class="btn btn-link" href="">Doorstep Convenience</a>
+                <a class="btn btn-link" href="">24/7 Accessibility</a>
+                <a class="btn btn-link" href="">Online Booking</a>
+                <a class="btn btn-link" href="">Customer-Centric</a>
+                <!-- <a class="btn btn-link" href="">Vacuam Cleaning</a> -->
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="copyright">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    &copy; <a class="border-bottom" href="#">JoyRide</a>, All Right Reserved.
+
+                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                    Designed By <a style="text-decoration: none;" class="border-bottom">Aarush Goyal,Parveela Kumari</a>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="footer-menu">
+                        <a href="">Home</a>
+                        <a href="">Cookies</a>
+                        <a href="">Help</a>
+                        <a href="">FQAs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Footer End -->
+
+<a href="#" class="btn btn-lg btn-danger btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+<!-- ==================================Signup Modal====================================== -->
+<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static"
+data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Signup here</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <center>
+          <img src="./front pics/th2.png" alt="" style="width: 100px; height: 100px;">
+          <table>
+            <tr>
+              <td>
+                <label class="user">Email</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="fa-solid fa-user fa-bounce"></i><input type="text" class="name m-2 remove-border" placeholder="Enter Email"
+                  id="txtemail" required autofocus>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div id="errus">*</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="user">Password</label>
+              </td>
+            </tr> <br>
+            <tr>
+              <td>
+                <i class="fa-solid fa-key fa-flip"></i><input type="password" class="name m-2 remove-border"
+                  placeholder="Enter Password" id="txtpass" required><i class="fa-solid fa-eye-slash m-2"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div id="errps">*</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="txtsel" class="user m-2">Type</label>
+              </td>
+            </tr> <br>
+            <tr>
+              <td>
+                <select class="form-select" aria-label="Disabled select example" id="txtsel">
+                  <option selected>Select</option>
+                  <option value="Driver">Driver</option>
+                  <option value="Customer">Customer</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        </center>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" id="btnsnp" data-bs-dismiss="modal">Signup</button>
+      <div id="res">
+        *
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- =============================Login Modal=============================== -->
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Login here</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <center>
+          <img src="./front pics/th2.png" alt="">
+          <table>
+            <tr>
+              <td>
+                <label class="user">Email</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="fa-solid fa-user fa-bounce"></i><input type="text" class="name m-2 remove-border" placeholder="Enter Email"
+                  id="txtemaillg" required autofocus>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div id="errus2">*</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="user">Password</label>
+              </td>
+            </tr> <br>
+            <tr>
+              <td>
+                <i class="fa-solid fa-key fa-flip"></i><input type="password" class="name m-2 remove-border"
+                  placeholder="Enter Password" id="txtpasslg"><i class="fa-solid fa-eye-slash m-2"></i>
+              </td>
+            </tr>
+            <!-- <tr>
+              <td>
+                <div id="errps2">*</div>
+              </td>
+            </tr> -->
+          </table>
+        </center>
+        <button id="frgt" class="btn btn-link"style="font-size: 11px; margin:0px 0px 20px 150px; text-decoration: none;">Forgot Password ?</button>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+      <button type="button" class="btn btn-danger" id="btnlgn" >Login</button>
+      <div id="res2">*</div>
+    </div>
+  </div>
+</div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>

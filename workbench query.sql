@@ -1,0 +1,14 @@
+create database cab;
+use cab;
+create table drivers(email varchar(100) primary key,name varchar(30),mobile varchar(12), address varchar(100),proof varchar(20),file varchar(100));
+select * from drivers;
+create table customers(email varchar(100) primary key,name varchar(30),mobile varchar(12), address varchar(100),proof varchar(20),file varchar(100));
+select * from customers;
+create table cars(Srno int primary key auto_increment,email varchar(100),city varchar(15),brand varchar(30),model varchar(30),type varchar(20),fuel varchar(10),carcondition varchar(20));
+select * from cars;
+drop table cars;
+create table passengers(srno int auto_increment primary key,pemail varchar(100),pname varchar(30),pmobile varchar(12),email varchar(100),name varchar(50),mobile varchar(12),pickadd varchar(100),doj date,picktime time,src varchar(30),des varchar(30),track int);
+select * from passengers;
+update passengers set track =2 where track =3;
+drop table passengers;
+update passengers set track=0 where track=2;
